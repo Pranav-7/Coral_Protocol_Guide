@@ -18,9 +18,9 @@ Now that you’ve got a sense of what Coral Protocol is and why it matters, let�
 
 We'll be using agents from the [Awesome Agents for Multi-Agent Systems repo](https://github.com/Coral-Protocol/awesome-agents-for-multi-agent-systems). In this guide, we’ll work with the following:
 
-- [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent.git)
-- [Repository Understanding Agent](https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git)
-- [Open Deep Research Agent](https://github.com/Coral-Protocol/Coral-OpenDeepResearch-Agent.git)
+- **[Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent.git)**
+- **[Repository Understanding Agent](https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git)**
+- **[Open Deep Research Agent](https://github.com/Coral-Protocol/Coral-OpenDeepResearch-Agent.git)**
 
 Each one plays a unique role — we’ll break that down as we set up your project.
 
@@ -51,7 +51,7 @@ Keep these keys handy - you'll need them during setup.
 
 ## Step 1: Set Up Your Project Structure
 
-Before we start building our multi-agent system, we need to gather all the necessary components. Each repository contains a specific agent with unique capabilities that will work together.
+Before we start building our multi-agent system, we need to gather all the necessary components. Think of this as collecting all the building blocks we'll need to construct our system. Each repository contains a specific agent with unique capabilities that will work together.
 
 ### Why these repositories?
 - **Coral-Interface-Agent**: This is our command center. It will receive your instructions and coordinate the other agents
@@ -107,10 +107,10 @@ cd coral-server
 ## Understanding the Agent Registry
 Before we dive into the configuration, let's understand what we're setting up. The `application.yaml` file contains an "Agent Registry" - think of it as a directory that tells the Coral server:
 
-- Which AI agents you can use in your sessions
-- The commands needed to run each agent program
-- Each agent's API keys, configuration options, and environment settings
-- Communication setup between agents and the server
+- What agents are available - Which AI agents you can use in your sessions
+- How to start each agent - The commands needed to run each agent program
+- What each agent needs - API keys, configuration options, and environment settings
+- How to connect them - The communication setup between agents and the server
 
 Each agent in the registry has two main parts:
 
@@ -303,17 +303,20 @@ Send all three requests. Each should show "Connected" status and start streaming
 
 **Expected Output:**
 
-Interface Agent Connection:
-
-![Interface Agent](./Expected_Outputs/5_Interface.png)
-
-RepoUnderstanding Agent Connection:
-
-![RepoUnderstanding Agent](./Expected_Outputs/6_Repo.png)
-
-OpenDeepResearch Agent Connection:
-
-![OpenDeepResearch Agent](./Expected_Outputs/7_Deepresearch.png)
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; justify-items: center;">
+  <div>
+    <h3>Interface Agent Connection:</h3>
+    <img src="./Expected_Outputs/5_Interface.png" alt="Interface Agent Output" width="100%" style="margin: 10px 0;">
+  </div>
+  <div>
+    <h3>RepoUnderstanding Agent Connection:</h3>
+    <img src="./Expected_Outputs/6_Repo.png" alt="Repo Agent Output" width="100%" style="margin: 10px 0;">
+  </div>
+  <div style="grid-column: span 2;">
+    <h3>OpenDeepResearch Agent Connection:</h3>
+    <img src="./Expected_Outputs/7_Deepresearch.png" alt="DeepResearch Agent Output" width="100%">
+  </div>
+</div>
 
 
 ## Step 6: Create a Communication Thread
