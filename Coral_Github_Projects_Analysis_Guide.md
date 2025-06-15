@@ -18,9 +18,9 @@ Now that you’ve got a sense of what Coral Protocol is and why it matters, let�
 
 We'll be using agents from the [Awesome Agents for Multi-Agent Systems repo](https://github.com/Coral-Protocol/awesome-agents-for-multi-agent-systems). In this guide, we’ll work with the following:
 
-- **[Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent.git)**
-- **[Repository Understanding Agent](https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git)**
-- **[Open Deep Research Agent](https://github.com/Coral-Protocol/Coral-OpenDeepResearch-Agent.git)**
+- [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent.git)
+- [Repository Understanding Agent](https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git)
+- [Open Deep Research Agent](https://github.com/Coral-Protocol/Coral-OpenDeepResearch-Agent.git)
 
 Each one plays a unique role — we’ll break that down as we set up your project.
 
@@ -107,10 +107,10 @@ cd coral-server
 ## Understanding the Agent Registry
 Before we dive into the configuration, let's understand what we're setting up. The `application.yaml` file contains an "Agent Registry" - think of it as a directory that tells the Coral server:
 
-- What agents are available - Which AI agents you can use in your sessions
-- How to start each agent - The commands needed to run each agent program
-- What each agent needs - API keys, configuration options, and environment settings
-- How to connect them - The communication setup between agents and the server
+- Which AI agents you can use in your sessions
+- The commands needed to run each agent program
+- Each agent's API keys, configuration options, and environment settings
+- Communication setup between agents and the server
 
 Each agent in the registry has two main parts:
 
