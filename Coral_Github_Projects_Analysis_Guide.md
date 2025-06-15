@@ -6,22 +6,23 @@ In this guide, you'll build a multi-agent system that does exactly that: automat
 
 ## What is Coral Protocol?
 
-AI agents are advancing rapidly — writing code, answering questions, managing tasks, and even interacting with APIs. But despite these capabilities, most agents remain isolated, operating within the boundaries of a single tool or orchestration script. What’s missing is infrastructure: a way for agents to connect, coordinate, and collaborate like distributed teams.
+AI agents are advancing rapidly — writing code, answering questions, managing tasks, and even interacting with APIs. But despite these capabilities, most agents remain isolated, operating within the boundaries of a single tool or orchestration script. What's missing is infrastructure: a way for agents to connect, coordinate, and collaborate like distributed teams.
 
-![1_CLI_Output](./Expected_Outputs/Coral.png)
+![1_CLI_Output](./Outputs/Coral.png)
 
 Coral Protocol was created to solve this gap. Coral Protocol introduces Sessions: shared environments where agents communicate through threads, coordinate tasks, and transact securely. Developers no longer need to figure out agent-to-agent communication. Coral handles that, so they can focus on making agents smarter, more capable, and better at solving specific problems.
 
 ## What You'll Build
 
-Using this Open Decentralized Infrastructure, you'll create a Multi-Agent-System:
-- An Interface Agent receives your requests and coordinates the workflow
-- A Repository Understanding Agent analyzes the codebase structure and functionality  
-- An OpenDeepResearch Agent performs detailed research and generates reports
+Now that you’ve got a sense of what Coral Protocol is and why it matters, let’s build a practical multi-agent system step by step.
 
-We'll use agents from the [Awesome Agents for Multi-Agent Systems repo](https://github.com/Coral-Protocol/awesome-agents-for-multi-agent-systems).
+We'll be using agents from the [Awesome Agents for Multi-Agent Systems repo](https://github.com/Coral-Protocol/awesome-agents-for-multi-agent-systems). In this guide, we’ll work with the following:
 
-All agents communicate through Coral Protocol's session-based infrastructure, and you'll monitor everything through a web-based debugger.
+- **[Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent.git)**
+- **[Repository Understanding Agent](https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git)**
+- **[Open Deep Research Agent](https://github.com/Coral-Protocol/Coral-OpenDeepResearch-Agent.git)**
+
+Each one plays a unique role — we’ll break that down as we set up your project.
 
 ## Prerequisites
 
@@ -43,7 +44,7 @@ You'll need these API keys before proceeding:
 | Service | Where to Get It | Usage |
 |---------|----------------|-------|
 | OpenAI | [platform.openai.com](https://platform.openai.com/account/api-keys) | Powers all AI agents |
-| LinkUp | [app.linkup.so](https://app.linkup.so/home) | Used by research agent for data analysis |
+| LinkUp | [app.linkup.so](https://app.linkup.so/home) | Used by OpenDeep for data analysis |
 | GitHub Token | [github.com/settings/tokens](https://github.com/settings/tokens) | Repository access permissions |
 
 Keep these keys handy - you'll need them during setup.
@@ -53,8 +54,8 @@ Keep these keys handy - you'll need them during setup.
 Before we start building our multi-agent system, we need to gather all the necessary components. Think of this as collecting all the building blocks we'll need to construct our system. Each repository contains a specific agent with unique capabilities that will work together.
 
 ### Why these repositories?
-- **Coral-Interface-Agent**: This is our command center. It will receive your instructions and coordinate the other agents, similar to how a project manager coordinates a team.
-- **Coral-RepoUnderstanding-Agent**: This agent is like a code reviewer who can quickly scan and understand repository structures. It will help us analyze GitHub projects efficiently.
+- **Coral-Interface-Agent**: This is our command center. It will receive your instructions and coordinate the other agents
+- **Coral-RepoUnderstanding-Agent**: This agent is similar to code reviewer who can quickly scan and understand repository structures.
 - **Coral-OpenDeepResearch-Agent**: This is our research specialist that can dive deep into topics and generate comprehensive reports.
 - **coral-server**: This is the backbone of our system, handling communication between agents and managing sessions.
 - **coral-dbg**: This is our control panel that will help us visualize and monitor agent interactions.
@@ -92,7 +93,7 @@ coral-project/
 ```
 
 **Expected Output:**
-![Project Structure](./Expected_Outputs/1.png)
+![Project Structure](./Outputs/1.png)
 
 ## Step 2: Configure the Coral Server
 
@@ -103,10 +104,21 @@ Navigate to the `coral-server` directory:
 ```bash
 cd coral-server
 ```
+## Understanding the Agent Registry
+Before we dive into the configuration, let's understand what we're setting up. The `application.yaml` file contains an "Agent Registry" - think of it as a directory that tells the Coral server:
+
+- What agents are available - Which AI agents you can use in your sessions
+- How to start each agent - The commands needed to run each agent program
+- What each agent needs - API keys, configuration options, and environment settings
+- How to connect them - The communication setup between agents and the server
+
+Each agent in the registry has two main parts:
+
+- Options: The configuration settings users need to provide (like API keys)
+- Runtime: Instructions for how to actually start and run the agent
 
 Open `src/main/resources/application.yaml` and replace its contents with this configuration:
 
-This `application.yaml` acts as a blueprint that tells the server which agents are available, how to run each agent, what API keys they need, and how they should connect to each other:
 
 ```yaml
 registry:
@@ -131,7 +143,7 @@ registry:
     options:
       - name: "OPENAI_API_KEY"
         type: "string"
-        description: "OpenAI API Key for Repository Agent"
+        description: "OpenAI API Key for RepoUnderstanding Agent"
       - name: "GITHUB_PERSONAL_ACCESS_TOKEN"
         type: "string"
         description: "GitHub Personal Access Token"
@@ -153,10 +165,10 @@ registry:
     options:
       - name: "OPENAI_API_KEY"
         type: "string"
-        description: "OpenAI API Key for Research Agent"
+        description: "OpenAI API Key for OpenDeepResearch agent"
       - name: "LINKUP_API_KEY"
         type: "string"
-        description: "LinkUp API Key for Research Agent"
+        description: "LinkUp API Key for OpenDeepResearch agent"
     runtime:
       type: "executable"
       command:
@@ -180,14 +192,37 @@ Now start the server that will coordinate your agents:
 ./gradlew run
 ```
 
-> Keep this terminal open - the server needs to stay running. You should see output indicating the server has started successfully on port 5555.
-
 **Expected Output:**
-![Server Starting](./Expected_Outputs/3.png)
+![Server Starting](./Outputs/3.png)
+
+> Keep this terminal open - the server needs to stay running. You should see output indicating the server has started successfully on port 5555.
 
 ## Step 4: Create a Session
 
-Sessions are isolated workspaces where your agents collaborate. Think of a session as a private environment where your agents can communicate securely.
+Now that the server is running, you can interact with it via API. Use Postman (or any HTTP client) to send a request to create a new session. 
+
+When you create a session, you're essentially telling Coral Protocol:
+- Which agents you want to use
+- How those agents should be configured (with their API keys)
+- Which agents are allowed to talk to each other
+
+Let's break down what each part of the session configuration means:
+## Understanding the Session Structure
+- Application ID & Privacy Key: These act like room credentials - they identify your workspace and keep it secure. In development mode, you can use any values you want.
+- Agent Graph: This is where you define your team of agents:
+
+- agents: A list of all the agents you want in your session, each with a unique name you choose
+links: Rules about which agents can communicate with each other
+
+- Agent Configuration: For each agent, you specify:
+
+    - type: "local" (agents running on your machine)
+    - agentType: The specific agent from your registry (like "coral-interface")
+    - options: The API keys and settings that agent needs
+
+- Communication Links: The `links` array defines who can talk to whom. Each inner array represents a group of agents that can all communicate with each other.
+
+**Let's create session:**
 
 Open Postman and create a new request:
 
@@ -241,7 +276,7 @@ Send the request. The response will contain your session details. Save these val
 
 **Expected Output:**
 
-![Session Creation](./Expected_Outputs/4.png)
+![Session Creation](./Outputs/4.png)
 
 ## Step 5: Connect Your Agents
 
@@ -254,12 +289,12 @@ Create three new GET requests in Postman (open each in a separate tab):
 GET http://127.0.0.1:5555/devmode/github-analyzer/secure-key-123/github-analysis-session/sse?agentId=my-interface
 ```
 
-**Agent 2 - Repository Agent:**
+**Agent 2 - RepoUnderstanding Agent:**
 ```
 GET http://127.0.0.1:5555/devmode/github-analyzer/secure-key-123/github-analysis-session/sse?agentId=my-repo
 ```
 
-**Agent 3 - Research Agent:**
+**Agent 3 - OpenDeepResearch Agent:**
 ```
 GET http://127.0.0.1:5555/devmode/github-analyzer/secure-key-123/github-analysis-session/sse?agentId=my-research
 ```
@@ -270,19 +305,36 @@ Send all three requests. Each should show "Connected" status and start streaming
 
 Interface Agent Connection:
 
-![Interface Agent](./Expected_Outputs/5_Interface.png)
+![Interface Agent](./Outputs/5_Interface.png)
 
-Repository Agent Connection:
+RepoUnderstanding Agent Connection:
 
-![Repository Agent](./Expected_Outputs/6_Repo.png)
+![RepoUnderstanding Agent](./Outputs/6_Repo.png)
 
-Research Agent Connection:
+OpenDeepResearch Agent Connection:
 
-![Research Agent](./Expected_Outputs/7_Deepresearch.png)
+![OpenDeepResearch Agent](./Outputs/7_Deepresearch.png)
+
 
 ## Step 6: Create a Communication Thread
 
-When you establish a connection between your Agents and the Coral server, the next step is to create threads. Threads organize specific conversations within a session.
+When you establish a connection between your Agents and the Coral server, the next step is to create threads. 
+
+## Why We Need Threads
+
+Before we create our thread, let's understand why threads are crucial in Coral Protocol:
+
+1. **Organized Communication**: Threads are like dedicated chat rooms where agents can collaborate on specific tasks.
+
+2. **Context Preservation**: Each thread maintains its own conversation history. This allows agents to reference previous messages and maintain context throughout their collaboration
+
+3. **Focused Collaboration**: When we create a thread, we're essentially saying "this is a specific task we're working on together."
+
+4. **Message Routing**: Only the agents added to a thread receive and respond to messages, keeping things efficient. keeping communication efficient and targeted.
+
+5. **Task Isolation**: Different threads can handle different tasks at the same time — no overlap, no noise.
+
+In our case, we’ll create a thread where the `Interface`, `RepoUnderstanding`, and `OpenDeepResearch` agents will work together to analyze a GitHub codebase.
 
 Let's create our first thread:
 
@@ -302,7 +354,7 @@ The response will include a `threadId`. Save this value.
 
 **Expected Output:**
 
-![Thread Creation](./Expected_Outputs/8_Create_Thread.png)
+![Thread Creation](./Outputs/8_Create_Thread.png)
 
 ## Step 7: Start the Analysis
 
@@ -327,7 +379,7 @@ Watch the agent connection tabs in Postman - you'll see messages flowing between
 
 **Expected Output:**
 
-![Agent Communication](./Expected_Outputs/9_Interface_Repo.png)
+![Agent Communication](./Outputs/9_Interface_Repo.png)
 
 ## Step 8: Set Up the Visual Debugger
 
@@ -371,21 +423,21 @@ Click "Connect" and you'll see your thread listed on the left. Click on it to vi
 **Expected Output:**
 
 Debugger Connection:
-![Debugger UI](./Expected_Outputs/13_coral_dbg_orig_window.png)
+![Debugger UI](./Outputs/13_coral_dbg_orig_window.png)
 
 Thread View:
-![Thread View](./Expected_Outputs/Test_Thread.png)
+![Thread View](./Outputs/Test_Thread.png)
 
 Agent Interactions:
-![Agent Interactions](./Expected_Outputs/14.png)
+![Agent Interactions](./Outputs/14.png)
 
 ## What Happens Next
 
 Your multi-agent system is now running. Here's the workflow:
 
 1. The Interface Agent receives your request and coordinates the task
-2. The Repository Agent clones and analyzes the GitHub repository structure
-3. The Research Agent performs deep analysis using web research capabilities
+2. The RepoUnderstanding Agent clones and analyzes the GitHub repository structure
+3. The OpenDeep performs deep analysis using web research capabilities
 4. All agents collaborate to provide comprehensive insights
 5. You can monitor everything through the debugger interface
 
@@ -407,4 +459,4 @@ With your basic system running, you can:
 - Integrate with other APIs and services
 - Build automated workflows for repository monitoring
 
-The foundation you've built here can scale to much more complex multi-agent systems for various use cases beyond GitHub analysis.
+The foundation you've built here can scale to much more complex multi-agent systems for various use cases beyond GitHub Open Source Project analysis.
