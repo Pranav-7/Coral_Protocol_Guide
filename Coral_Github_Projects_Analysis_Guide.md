@@ -8,7 +8,7 @@ In this guide, you'll build a multi-agent system that does exactly that: automat
 
 AI agents are advancing rapidly — writing code, answering questions, managing tasks, and even interacting with APIs. But despite these capabilities, most agents remain isolated, operating within the boundaries of a single tool or orchestration script. What's missing is infrastructure: a way for agents to connect, coordinate, and collaborate like distributed teams.
 
-![1_CLI_Output](./Outputs/Coral.png)
+![1_CLI_Output](./Expected_Outputs/Coral.png)
 
 Coral Protocol was created to solve this gap. Coral Protocol introduces Sessions: shared environments where agents communicate through threads, coordinate tasks, and transact securely. Developers no longer need to figure out agent-to-agent communication. Coral handles that, so they can focus on making agents smarter, more capable, and better at solving specific problems.
 
@@ -93,7 +93,7 @@ coral-project/
 ```
 
 **Expected Output:**
-![Project Structure](./Outputs/1.png)
+![Project Structure](./Expected_Outputs/1.png)
 
 ## Step 2: Configure the Coral Server
 
@@ -193,7 +193,7 @@ Now start the server that will coordinate your agents:
 ```
 
 **Expected Output:**
-![Server Starting](./Outputs/3.png)
+![Server Starting](./Expected_Outputs/3.png)
 
 > Keep this terminal open - the server needs to stay running. You should see output indicating the server has started successfully on port 5555.
 
@@ -276,7 +276,7 @@ Send the request. The response will contain your session details. Save these val
 
 **Expected Output:**
 
-![Session Creation](./Outputs/4.png)
+![Session Creation](./Expected_Outputs/4.png)
 
 ## Step 5: Connect Your Agents
 
@@ -305,15 +305,15 @@ Send all three requests. Each should show "Connected" status and start streaming
 
 Interface Agent Connection:
 
-![Interface Agent](./Outputs/5_Interface.png)
+![Interface Agent](./Expected_Outputs/5_Interface.png)
 
 RepoUnderstanding Agent Connection:
 
-![RepoUnderstanding Agent](./Outputs/6_Repo.png)
+![RepoUnderstanding Agent](./Expected_Outputs/6_Repo.png)
 
 OpenDeepResearch Agent Connection:
 
-![OpenDeepResearch Agent](./Outputs/7_Deepresearch.png)
+![OpenDeepResearch Agent](./Expected_Outputs/7_Deepresearch.png)
 
 
 ## Step 6: Create a Communication Thread
@@ -354,7 +354,7 @@ The response will include a `threadId`. Save this value.
 
 **Expected Output:**
 
-![Thread Creation](./Outputs/8_Create_Thread.png)
+![Thread Creation](./Expected_Outputs/8_Create_Thread.png)
 
 ## Step 7: Start the Analysis
 
@@ -379,7 +379,7 @@ Watch the agent connection tabs in Postman - you'll see messages flowing between
 
 **Expected Output:**
 
-![Agent Communication](./Outputs/9_Interface_Repo.png)
+![Agent Communication](./Expected_Outputs/9_Interface_Repo.png)
 
 ## Step 8: Set Up the Visual Debugger
 
@@ -423,13 +423,13 @@ Click "Connect" and you'll see your thread listed on the left. Click on it to vi
 **Expected Output:**
 
 Debugger Connection:
-![Debugger UI](./Outputs/13_coral_dbg_orig_window.png)
+![Debugger UI](./Expected_Outputs/13_coral_dbg_orig_window.png)
 
 Thread View:
-![Thread View](./Outputs/Test_Thread.png)
+![Thread View](./Expected_Outputs/Test_Thread.png)
 
 Agent Interactions:
-![Agent Interactions](./Outputs/14.png)
+![Agent Interactions](./Expected_Outputs/14.png)
 
 ## What Happens Next
 
@@ -459,4 +459,4 @@ With your basic system running, you can:
 - Integrate with other APIs and services
 - Build automated workflows for repository monitoring
 
-The foundation you've built here can scale to much more complex multi-agent systems for various use cases beyond GitHub Open Source Project analysis.
+The foundation you've built here can scale to much more complex multi-agent systems for various use cases beyond GitHub analysis.
