@@ -34,7 +34,7 @@ Before starting, ensure you have the required software and API keys.
 |------|---------|---------|
 | Node.js | 18+ | JavaScript runtime for the debugger UI |
 | Python | 3.10+ | Runtime for the AI agents |
-| Java JDK | 24 | Required for the Coral backend server |
+| Java JDK | 24(Preferred) | Required for the Coral backend server |
 | Postman | Latest | API testing and interaction |
 
 ### API Keys Needed
@@ -303,20 +303,21 @@ Send all three requests. Each should show "Connected" status and start streaming
 
 **Expected Output:**
 
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; justify-items: center;">
-  <div>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+  <div style="flex: 0 0 48%; box-sizing: border-box;">
     <h3>Interface Agent Connection:</h3>
     <img src="./Expected_Outputs/5_Interface.png" alt="Interface Agent Output" width="100%" style="margin: 10px 0;">
   </div>
-  <div>
+  <div style="flex: 0 0 48%; box-sizing: border-box;">
     <h3>RepoUnderstanding Agent Connection:</h3>
     <img src="./Expected_Outputs/6_Repo.png" alt="Repo Agent Output" width="100%" style="margin: 10px 0;">
   </div>
-  <div style="grid-column: span 2;">
+  <div style="flex: 0 0 48%; box-sizing: border-box;">
     <h3>OpenDeepResearch Agent Connection:</h3>
     <img src="./Expected_Outputs/7_Deepresearch.png" alt="DeepResearch Agent Output" width="100%">
   </div>
 </div>
+
 
 
 ## Step 6: Create a Communication Thread
